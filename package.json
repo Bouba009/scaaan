@@ -2,10 +2,12 @@
   "name": "aitchikh-pos",
   "version": "1.0.0",
   "description": "Enterprise POS Pro",
+  "author": "Bouba009",
+  "private": true,
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder --publish never"
   },
   "devDependencies": {
     "electron": "^28.2.0",
