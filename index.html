@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="h-full bg-slate-50">
+<html lang="ar" dir="rtl" class="h-full bg-slate-55">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المتاجر الاحترافي | Store POS Pro</title>
+    <title>نظام إدارة المتاجر الاحترافي | Enterprise POS Pro</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- SweetAlert2 for alerts -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- HTML5-QRCode JS CDN (Stable Version) -->
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -24,9 +24,8 @@
             #receipt-print-area, #receipt-print-area * { visibility: visible; }
             #receipt-print-area { position: absolute; left: 0; top: 0; width: 100%; }
         }
-        .scanner-active { border-color: #4f46e5 !important; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
-        /* Style adjustments for HTML5-QRCode native layout to look premium */
-        #reader button {
+        /* Style adjustments for HTML5-QRCode native layout inside the inline widget */
+        #inline-reader button {
             background-color: #4f46e5 !important;
             color: white !important;
             border: none !important;
@@ -36,31 +35,41 @@
             font-weight: bold !important;
             cursor: pointer !important;
             margin: 4px !important;
+            transition: all 0.2s;
         }
-        #reader select {
+        #inline-reader button:hover { background-color: #4338ca !important; }
+        #inline-reader select {
             border: 1px solid #cbd5e1 !important;
             padding: 5px !important;
             border-radius: 6px !important;
-            font-size: 11px !important;
+            font-size: 10px !important;
             outline: none !important;
+            background: white;
         }
+        #inline-reader { border: none !important; }
     </style>
 </head>
 <body class="h-full flex flex-col overflow-hidden text-slate-800">
 
     <!-- HEADER -->
-    <header class="bg-slate-900 text-white flex items-center justify-between px-6 py-4 shadow-lg z-10 shrink-0">
+    <header class="bg-slate-950 text-white flex items-center justify-between px-6 py-3.5 shadow-lg z-10 shrink-0">
         <div class="flex items-center space-x-3 space-x-reverse">
             <div class="bg-indigo-600 p-2.5 rounded-xl flex items-center justify-center">
                 <i class="fa-solid fa-cash-register text-xl text-white"></i>
             </div>
             <div>
-                <h1 class="text-lg font-extrabold tracking-wide" id="store-title">نظام إدارة المتاجر الاحترافي</h1>
-                <p class="text-[10px] text-slate-400 font-medium">النسخة المتقدمة 2.1</p>
+                <h1 class="text-base font-extrabold tracking-wide text-slate-100" id="store-title">نظام إدارة المتاجر الاحترافي</h1>
+                <p class="text-[9px] text-slate-400 font-medium">إصدار البيع الذكي المستمر 2.5</p>
             </div>
         </div>
         
         <div class="flex items-center space-x-4 space-x-reverse">
+            <!-- Global Scanner Status Badge -->
+            <div class="hidden lg:flex items-center space-x-2 space-x-reverse bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-[10px] font-bold text-slate-300" data-i18n="gun_scanner_active">منظومة القارئ الخارجي (USB/Wireless) نشطة تلقائياً</span>
+            </div>
+
             <!-- Language Selector -->
             <div class="flex bg-slate-800 rounded-xl p-1 border border-slate-700">
                 <button onclick="changeLanguage('ar')" id="lang-ar-btn" class="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition-all">العربية</button>
@@ -74,7 +83,7 @@
 
     <div class="flex flex-1 overflow-hidden">
         <!-- SIDEBAR -->
-        <aside class="w-64 bg-slate-900 border-t border-slate-800 flex flex-col justify-between shrink-0">
+        <aside class="w-64 bg-slate-950 border-t border-slate-900 flex flex-col justify-between shrink-0">
             <nav class="p-4 space-y-1">
                 <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
                     <i class="fa-solid fa-chart-pie text-lg w-6 text-indigo-400"></i>
@@ -101,18 +110,18 @@
                     <span data-i18n="nav_settings">إعدادات النظام</span>
                 </a>
             </nav>
-            <div class="p-4 border-t border-slate-850 text-[10px] text-slate-500 text-center">
+            <div class="p-4 border-t border-slate-900 text-[10px] text-slate-600 text-center">
                 <span>Enterprise POS Pro &copy; 2026</span>
             </div>
         </aside>
 
         <!-- MAIN AREA -->
-        <main class="flex-1 overflow-y-auto p-6 relative bg-slate-55">
+        <main class="flex-1 overflow-y-auto p-5 relative bg-slate-50">
             
             <!-- SECTION 1: DASHBOARD -->
             <section id="section-dashboard" class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-bold text-slate-850" data-i18n="dash_overview">نظرة عامة على النشاط</h2>
+                    <h2 class="text-xl font-bold text-slate-800" data-i18n="dash_overview">نظرة عامة على النشاط</h2>
                 </div>
                 <!-- Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -162,101 +171,116 @@
             </section>
 
             <!-- SECTION 2: POS (POINT OF SALE) -->
-            <section id="section-pos" class="hidden h-full flex flex-col lg:flex-row gap-6">
-                <!-- POS Main Panel -->
-                <div class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
-                    
-                    <!-- BARCODE SCANNER FOCUS BOX -->
-                    <div class="bg-slate-900 text-white p-4 rounded-xl mb-4 shrink-0 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div class="flex items-center space-x-3 space-x-reverse w-full md:w-auto">
-                            <i class="fa-solid fa-circle-nodes text-emerald-400 animate-pulse text-lg"></i>
-                            <div>
-                                <h3 class="text-xs font-bold" data-i18n="barcode_pos_title">حقل مسح الباركود النشط</h3>
-                                <p class="text-[10px] text-slate-400" data-i18n="barcode_pos_desc">وجه المسدس القارئ هنا للبيع فوراً</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 w-full md:w-72 no-refocus">
-                            <input type="text" id="pos-scanner-input" onkeypress="handlePOSScannerKeyPress(event)" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 placeholder-slate-500 text-center" data-i18n-placeholder="scan_ready" placeholder="جاهز للمسح [سكانر]...">
-                            <button onclick="openCameraScanner('pos-scanner-input')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm transition-all" title="مسح باستخدام الكاميرا أو رفع صورة"><i class="fa-solid fa-camera mr-1"></i> <span class="text-xs">كاميرا / ملف</span></button>
-                        </div>
-                    </div>
-
-                    <!-- Search / Quick Selection -->
+            <section id="section-pos" class="hidden h-full flex flex-col lg:flex-row gap-5">
+                <!-- Left Panel: Products & Filters -->
+                <div class="flex-1 bg-white p-5 rounded-2xl shadow-sm border border-slate-150 flex flex-col overflow-hidden">
                     <div class="flex flex-col sm:flex-row gap-4 justify-between items-center mb-4 shrink-0">
                         <div class="relative w-full sm:w-80 no-refocus">
-                            <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400"></i>
-                            <input type="text" id="pos-search" oninput="filterPOSProducts()" class="w-full pr-9 pl-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" data-i18n-placeholder="search_name_placeholder" placeholder="ابحث بكتابة اسم السلعة...">
+                            <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="pos-search" oninput="filterPOSProducts()" class="w-full pr-9 pl-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs" data-i18n-placeholder="search_name_placeholder" placeholder="ابحث بكتابة اسم السلعة...">
                         </div>
-                        <div class="flex gap-2 overflow-x-auto w-full sm:w-auto no-refocus" id="pos-category-filters"></div>
+                        <div class="flex gap-1.5 overflow-x-auto w-full sm:w-auto no-refocus pb-1" id="pos-category-filters"></div>
                     </div>
                     
                     <!-- Dynamic Products Grid -->
                     <div class="flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 p-1" id="pos-products-grid"></div>
                 </div>
 
-                <!-- Shopping Cart Panel -->
-                <div class="w-full lg:w-96 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between shrink-0">
-                    <div>
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 no-refocus">
-                            <h3 class="text-sm font-bold text-slate-800" data-i18n="cart_title">سلة المشتريات</h3>
-                            <button onclick="clearCart()" class="text-red-500 hover:text-red-700 text-xs font-semibold" data-i18n="clear_cart">تفريغ السلة</button>
+                <!-- Right Panel: Scanner View & Cart Details -->
+                <div class="w-full lg:w-[400px] flex flex-col gap-4 shrink-0">
+                    
+                    <!-- INLINE EMBEDDED PERSISTENT CAMERA SCANNER WIDGET -->
+                    <div class="bg-slate-900 rounded-2xl p-4 text-white shadow-md border border-slate-800 flex flex-col space-y-3 no-refocus">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse block" id="cam-pulse-dot"></span>
+                                <span class="text-xs font-bold text-slate-100" data-i18n="persistent_cam_title">سكانر الكاميرا النشط</span>
+                            </div>
+                            <button onclick="toggleInlineCamera()" id="btn-toggle-cam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-3 py-1 rounded-lg font-bold transition-all">
+                                <i class="fa-solid fa-video mr-1"></i> <span data-i18n="btn_start_cam">تشغيل الكاميرا المستمرة</span>
+                            </button>
                         </div>
                         
-                        <!-- Customer Selection -->
-                        <div class="mb-4 no-refocus">
-                            <label class="block text-[11px] font-bold text-slate-500 mb-1" data-i18n="select_customer">العميل المرتبط بالعملية</label>
-                            <select id="cart-customer" class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
-                                <option value="" data-i18n="walk_in_customer">عميل عابر (نقدي)</option>
-                            </select>
+                        <!-- File protocol warning warning (Inside Widget) -->
+                        <div id="inline-file-warning" class="hidden p-2.5 bg-amber-950/50 border border-amber-800/60 rounded-xl text-[10px] text-amber-300">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>
+                            <span data-i18n="cam_security_warning">المتصفح يمنع تشغيل الكاميرا من ملف محلي. يرجى استخدام السكانر الخارجي الملحق، أو الرفع على رابط استضافة آمن.</span>
                         </div>
 
-                        <!-- Cart Items List -->
-                        <div class="overflow-y-auto max-h-60 space-y-3 pr-1" id="cart-items-list"></div>
-                    </div>
-
-                    <!-- Payment Details Summary -->
-                    <div class="border-t border-slate-100 pt-4 mt-4 space-y-3 no-refocus">
-                        <div class="flex justify-between text-xs text-slate-500">
-                            <span data-i18n="subtotal">المجموع</span>
-                            <span id="cart-subtotal" class="font-bold">0.00</span>
-                        </div>
-                        <div class="flex justify-between text-xs text-slate-500 items-center">
-                            <span data-i18n="discount">الخصم (%)</span>
-                            <input type="number" id="cart-discount" oninput="calculateCartTotals()" min="0" max="100" class="w-16 border border-slate-200 rounded p-1 text-center font-bold text-xs" value="0">
-                        </div>
-                        <div class="flex justify-between text-xs text-slate-500 items-center">
-                            <span data-i18n="tax">الضريبة (%)</span>
-                            <input type="number" id="cart-tax" oninput="calculateCartTotals()" min="0" max="100" class="w-16 border border-slate-200 rounded p-1 text-center font-bold text-xs" value="0">
-                        </div>
-
-                        <!-- Payment Method selection -->
-                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-150 space-y-2">
-                            <label class="block text-[10px] font-bold text-slate-600" data-i18n="pay_method">طريقة الدفع</label>
-                            <div class="grid grid-cols-3 gap-1">
-                                <label class="border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer bg-white" id="pay-cash-label">
-                                    <input type="radio" name="pay_method" value="CASH" checked class="hidden" onchange="updatePayMethodUI()">
-                                    <span data-i18n="pay_cash">نقداً</span>
-                                </label>
-                                <label class="border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer bg-white" id="pay-card-label">
-                                    <input type="radio" name="pay_method" value="CARD" class="hidden" onchange="updatePayMethodUI()">
-                                    <span data-i18n="pay_card">بطاقة</span>
-                                </label>
-                                <label class="border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer bg-white" id="pay-debt-label">
-                                    <input type="radio" name="pay_method" value="DEBT" class="hidden" onchange="updatePayMethodUI()">
-                                    <span data-i18n="pay_debt">كريدي</span>
-                                </label>
+                        <!-- Continuous camera view area -->
+                        <div id="inline-reader" class="w-full bg-slate-950 rounded-xl overflow-hidden relative flex items-center justify-center text-slate-500 border border-slate-800 transition-all duration-300" style="height: 140px;">
+                            <div class="text-center p-4" id="inline-reader-placeholder">
+                                <i class="fa-solid fa-qrcode text-3xl mb-2 text-slate-700"></i>
+                                <p class="text-[10px] text-slate-500" data-i18n="cam_placeholder">الكاميرا مغلقة حالياً. انقر للتشغيل المستمر للبيع السريع</p>
                             </div>
                         </div>
-
-                        <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-dashed border-slate-200">
-                            <span data-i18n="grand_total">الإجمالي النهائي</span>
-                            <span id="cart-grand-total">0.00</span>
-                        </div>
-                        <button onclick="checkout()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl mt-2 transition-all flex items-center justify-center space-x-2 space-x-reverse text-sm">
-                            <i class="fa-solid fa-receipt"></i>
-                            <span data-i18n="checkout_btn">دفع وطباعة الفاتورة</span>
-                        </button>
                     </div>
+
+                    <!-- Shopping Cart Widget -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-150 flex flex-col justify-between flex-1 overflow-hidden min-h-[350px]">
+                        <div>
+                            <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100 no-refocus">
+                                <h3 class="text-xs font-bold text-slate-800" data-i18n="cart_title">سلة المشتريات</h3>
+                                <button onclick="clearCart()" class="text-red-500 hover:text-red-700 text-xs font-semibold" data-i18n="clear_cart">تفريغ السلة</button>
+                            </div>
+                            
+                            <!-- Customer Selection -->
+                            <div class="mb-3 no-refocus">
+                                <label class="block text-[10px] font-bold text-slate-500 mb-1" data-i18n="select_customer">العميل المرتبط بالعملية</label>
+                                <select id="cart-customer" class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
+                                    <option value="" data-i18n="walk_in_customer">عميل عابر (نقدي)</option>
+                                </select>
+                            </div>
+
+                            <!-- Cart Items List -->
+                            <div class="overflow-y-auto max-h-48 space-y-2 pr-1" id="cart-items-list"></div>
+                        </div>
+
+                        <!-- Pricing Summary -->
+                        <div class="border-t border-slate-100 pt-3 mt-3 space-y-2.5 no-refocus">
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span data-i18n="subtotal">المجموع</span>
+                                <span id="cart-subtotal" class="font-bold">0.00</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500 items-center">
+                                <span data-i18n="discount">الخصم (%)</span>
+                                <input type="number" id="cart-discount" oninput="calculateCartTotals()" min="0" max="100" class="w-14 border border-slate-200 rounded p-1 text-center font-bold text-xs" value="0">
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500 items-center">
+                                <span data-i18n="tax">الضريبة (%)</span>
+                                <input type="number" id="cart-tax" oninput="calculateCartTotals()" min="0" max="100" class="w-14 border border-slate-200 rounded p-1 text-center font-bold text-xs" value="0">
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div class="bg-slate-50 p-2 rounded-lg border border-slate-150 space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-600" data-i18n="pay_method">طريقة الدفع</label>
+                                <div class="grid grid-cols-3 gap-1">
+                                    <label class="border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer bg-white" id="pay-cash-label">
+                                        <input type="radio" name="pay_method" value="CASH" checked class="hidden" onchange="updatePayMethodUI()">
+                                        <span data-i18n="pay_cash">نقداً</span>
+                                    </label>
+                                    <label class="border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer bg-white" id="pay-card-label">
+                                        <input type="radio" name="pay_method" value="CARD" class="hidden" onchange="updatePayMethodUI()">
+                                        <span data-i18n="pay_card">بطاقة</span>
+                                    </label>
+                                    <label class="border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer bg-white" id="pay-debt-label">
+                                        <input type="radio" name="pay_method" value="DEBT" class="hidden" onchange="updatePayMethodUI()">
+                                        <span data-i18n="pay_debt">كريدي</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-2 border-t border-dashed border-slate-200">
+                                <span data-i18n="grand_total">الإجمالي النهائي</span>
+                                <span id="cart-grand-total">0.00</span>
+                            </div>
+                            <button onclick="checkout()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl mt-1.5 transition-all flex items-center justify-center space-x-2 space-x-reverse text-xs shadow-md">
+                                <i class="fa-solid fa-receipt"></i>
+                                <span data-i18n="checkout_btn">دفع وطباعة الفاتورة</span>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -341,7 +365,7 @@
                                     <th class="px-6 py-3.5 text-start" data-i18n="pay_method">طريقة الدفع</th>
                                     <th class="px-6 py-3.5 text-start" data-i18n="rep_items">الأصناف</th>
                                     <th class="px-6 py-3.5 text-start" data-i18n="rep_total">مبلغ الفاتورة</th>
-                                    <th class="px-6 py-3.5 text-center" data-i18n="col_actions">الإجراءات</th>
+                                    <th class="px-6 py-3.5 text-center" data-i18n="col_actions">إجراءات</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700 text-xs font-semibold" id="reports-table-body"></tbody>
@@ -410,10 +434,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1" data-i18n="col_barcode">كود بار / رمز التعريف (Barcode)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="prod-barcode" required class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
-                            <button type="button" onclick="openCameraScanner('prod-barcode')" class="bg-slate-800 text-white px-3 py-1 rounded-lg text-xs" title="سكان عبر الكاميرا"><i class="fa-solid fa-camera"></i></button>
-                        </div>
+                        <input type="text" id="prod-barcode" required class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1" data-i18n="col_category">الفئة / التصنيف</label>
@@ -491,97 +512,11 @@
         </div>
     </div>
 
-    <!-- CAMERA/FILE SCANNER MODAL (UPDATED AND HIGHLY ROBUST) -->
-    <div id="camera-modal" class="hidden fixed inset-0 bg-slate-900/85 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-150 p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b">
-                <h3 class="font-bold text-sm text-slate-800">سكانر قارئ الكواد بار | Scanner</h3>
-                <button onclick="closeCameraScanner()" class="text-slate-500 hover:text-black"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <!-- Warning block shown dynamically if running on local file system -->
-            <div id="file-protocol-warning" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800 space-y-1">
-                <div class="flex items-center space-x-2 space-x-reverse font-bold">
-                    <i class="fa-solid fa-shield-halved text-amber-600"></i>
-                    <span>تنبيه أمان المتصفح (Browser Security)</span>
-                </div>
-                <p>يمنع المتصفح الكاميرا من الفتح مباشرة من ملف محلي. <b>لتشغيلها:</b> ارفع البرنامج على استضافة مجانية (HTTPS) أو شغل سيرفر محلي (Localhost). <br><b>البديل الآن:</b> اضغط بالأسفل على "Scan an Image File" لرفع صورة باركود وسيقوم بقراءتها بدقة.</p>
-            </div>
-
-            <!-- HTML5 QR-Code target element -->
-            <div id="reader" class="w-full rounded-xl overflow-hidden bg-slate-50 border border-slate-200 p-2"></div>
-            
-            <div class="text-center text-[10px] text-slate-400">
-                يمكنك المسح المباشر بالكاميرا أو اختيار ملف صورة الكود من جهازك.
-            </div>
-        </div>
-    </div>
-
     <!-- PRINT VIEW AREA -->
     <div id="receipt-print-area" class="hidden p-8 bg-white text-black text-xs max-w-xs mx-auto"></div>
 
     <script>
-        // TRANSLATIONS
-        const i18n = {
-            ar: {
-                nav_dashboard: "لوحة التحكم", nav_pos: "نقطة البيع والسكانر", nav_inventory: "المخزن والمنتجات",
-                nav_customers: "العملاء والديون (الكريدي)", nav_reports: "التقارير والمبيعات", nav_settings: "إعدادات النظام",
-                dash_overview: "نظرة عامة على النشاط المالي", stat_sales: "إجمالي المبيعات", stat_profit: "صافي الأرباح المتوقعة",
-                stat_products: "أصناف السلع المتوفرة", stat_low_stock: "أصناف قريبة من النفاد", sales_chart: "مخطط المبيعات اليومية",
-                recent_sales: "آخر العمليات المباشرة", barcode_pos_title: "حقل قارئ الباركود (مسدس السكانر المباشر)",
-                barcode_pos_desc: "انقر هنا أو مرر السلعة فوراً للبيع السريع", scan_ready: "مسح فوري بالباركود...",
-                search_name_placeholder: "ابحث بكتابة اسم السلعة...", cart_title: "سلة المشتريات الحالية",
-                clear_cart: "تفريغ السلة", select_customer: "العميل المرتبط بالعملية", walk_in_customer: "عميل عابر (نقدي)",
-                subtotal: "المجموع الكلي قبل الضريبة", discount: "الخصم المطبق (%)", tax: "الضريبة المطبقة (%)",
-                pay_method: "طريقة دفع العميل لتلك الفاتورة", pay_cash: "نقداً (Cash)", pay_card: "بطاقة (Card)", pay_debt: "كريدي (Dette)",
-                grand_total: "الإجمالي النهائي المستحق", checkout_btn: "إتمام عملية الدفع وطباعة الفاتورة",
-                inventory_title: "إدارة المخازن وقائمة السلع والمنتجات", add_new_product: "إضافة سلعة جديدة للمخزن",
-                col_barcode: "باركود السلعة", col_name_ar: "اسم السلعة (عربي)", col_name_fr: "اسم السلعة (فرنسي)",
-                col_category: "الفئة", col_cost: "سعر التكلفة", col_price: "سعر البيع", col_stock: "المخزون الحالي",
-                col_min_stock: "حد الأمان", col_actions: "إجراءات", customers_title: "إدارة العملاء وتتبع الديون والكريدي",
-                add_new_customer: "إضافة عميل جديد لقاعدة البيانات", cust_name: "اسم العميل بالكامل",
-                cust_phone: "رقم الهاتف", cust_email: "البريد الإلكتروني", cust_debt: "الديون الحالية (الكريدي المستحق)",
-                reports_title: "تقارير الأرباح والمبيعات المفصلة", sales_history: "الأرشيف العام للفواتير الصادرة",
-                rep_inv_id: "رقم الفاتورة", rep_date: "التاريخ والوقت", rep_customer: "العميل المستفيد",
-                rep_items: "الأصناف", rep_total: "مبلغ الفاتورة", settings_title: "إعدادات المتجر العامة",
-                set_store_name: "اسم المحل أو المتجر", set_currency: "رمز العملة الافتراضية للمحل",
-                set_default_tax: "نسبة الضريبة الافتراضية (%)", btn_save_settings: "حفظ إعدادات المتجر المالي",
-                db_management: "حفظ واستيراد البيانات (حماية من الفقدان)", db_desc: "لحماية أرباحك ومنتجاتك من الضياع، نوصي بتنزيل نسخة احتياطية بشكل دوري على جهازك لسهولة استرجاعها.",
-                btn_export: "تصدير قاعدة البيانات (JSON)", btn_import: "استيراد قاعدة بيانات",
-                modal_add_product: "إدخال وتعديل بيانات السلعة", btn_cancel: "إلغاء الأمر", btn_save: "حفظ البيانات",
-                all_cats: "الكل"
-            },
-            fr: {
-                nav_dashboard: "Tableau de Bord", nav_pos: "Caisse & Scanner", nav_inventory: "Stock & Produits",
-                nav_customers: "Clients & Crédits", nav_reports: "Rapports & Ventes", nav_settings: "Paramètres",
-                dash_overview: "Aperçu de l'Activité", stat_sales: "Ventes Totales", stat_profit: "Bénéfice Net Attendu",
-                stat_products: "Total Articles en Stock", stat_low_stock: "Alerte Rupture de Stock", sales_chart: "Statistiques de Vente",
-                recent_sales: "Transactions Récentes", barcode_pos_title: "Lecteur Code-barres Actif (Douchette)",
-                barcode_pos_desc: "Scannez l'article directement pour l'ajouter", scan_ready: "Scanner le code-barres...",
-                search_name_placeholder: "Rechercher par nom de l'article...", cart_title: "Panier en Cours",
-                clear_cart: "Vider le panier", select_customer: "Client associé", walk_in_customer: "Client de passage",
-                subtotal: "Sous-total H.T.", discount: "Remise (%)", tax: "TVA (%)",
-                pay_method: "Mode de Paiement", pay_cash: "Espèces (Cash)", pay_card: "Carte (Card)", pay_debt: "Crédit (Dette)",
-                grand_total: "Total Global TTC", checkout_btn: "Valider le paiement & Imprimer",
-                inventory_title: "Gestion d'Inventaire & Articles", add_new_product: "Nouveau Produit",
-                col_barcode: "Code-barres", col_name_ar: "Nom (Arabe)", col_name_fr: "Nom (Français)",
-                col_category: "Catégorie", col_cost: "Prix d'Achat", col_price: "Prix de Vente", col_stock: "Stock Actuel",
-                col_min_stock: "Stock Min", col_actions: "Actions", customers_title: "Gestion Clients & Crédits (Dettes)",
-                add_new_customer: "Ajouter Nouveau Client", cust_name: "Nom Complet",
-                cust_phone: "Numéro de Téléphone", cust_email: "Adresse Email", cust_debt: "Dette Actuelle (Crédit)",
-                reports_title: "Rapports & Ventes détaillés", sales_history: "Historique des Factures Émises",
-                rep_inv_id: "N° Facture", rep_date: "Date & Heure", rep_customer: "Client",
-                rep_items: "Articles", rep_total: "Montant TTC", settings_title: "Paramètres Généraux",
-                set_store_name: "Nom du Magasin", set_currency: "Devise par défaut",
-                set_default_tax: "TVA par défaut (%)", btn_save_settings: "Enregistrer la configuration",
-                db_management: "Sauvegarde & Restoration", db_desc: "Pour éviter de perdre vos données, téléchargez régulièrement une sauvegarde JSON sur votre PC.",
-                btn_export: "Exporter (JSON)", btn_import: "Importer",
-                modal_add_product: "Fiche Produit", btn_cancel: "Annuler", btn_save: "Enregistrer",
-                all_cats: "Tous"
-            }
-        };
-
-        // STATE
+        // STATE & LOCAL STORAGE
         let state = {
             products: JSON.parse(localStorage.getItem('pro_shop_products')) || [],
             customers: JSON.parse(localStorage.getItem('pro_shop_customers')) || [],
@@ -595,23 +530,46 @@
             cart: []
         };
 
-        // Demo Data
-        if (state.products.length === 0) {
-            state.products = [
-                { barcode: "6130001", nameAr: "مشروب غازي 1 لتر", nameFr: "Soda Gazeux 1L", category: "Boissons", cost: 100, price: 130, stock: 45, minStock: 10 },
-                { barcode: "6130002", nameAr: "بسكويت الشوكولاتة 150غ", nameFr: "Biscuit Chocolat 150g", category: "Épicerie", cost: 50, price: 70, stock: 90, minStock: 15 },
-                { barcode: "6130003", nameAr: "زيت طهي نباتي 2 لتر", nameFr: "Huile de Cuisson 2L", category: "Épicerie", cost: 350, price: 420, stock: 4, minStock: 5 }
-            ];
-            state.customers = [
-                { name: "محمد البشير", phone: "0550123456", email: "bachir@mail.com", debt: 0 },
-                { name: "سمير بوعلي", phone: "0660987654", email: "samir@mail.com", debt: 350 }
-            ];
-            saveToStorage();
-        }
-
         let salesChartInstance = null;
-        let html5QrScanner = null;
+        let inlineScanner = null;
+        let isCamRunning = false;
         let selectedCategory = "All";
+
+        // GLOBAL HARDWARE USB/WIRELESS SCANNER CAPTURING ENGINE
+        let barcodeBuffer = "";
+        let lastKeyTime = Date.now();
+
+        document.addEventListener('keydown', function(e) {
+            // Intercept scan events only on the active POS Tab
+            const posSec = document.getElementById('section-pos');
+            if (!posSec || posSec.classList.contains('hidden')) return;
+
+            // Avoid capturing input if user is actively writing a customer name/debt/email
+            if (document.activeElement && 
+                document.activeElement.tagName === 'INPUT' && 
+                document.activeElement.id !== 'pos-scanner-input' && 
+                document.activeElement.id !== 'pos-search') {
+                return;
+            }
+
+            const currentTime = Date.now();
+            
+            // Barcode scanners type characters incredibly fast (typically < 30ms difference)
+            if (currentTime - lastKeyTime > 50) {
+                barcodeBuffer = ""; // Reset buffer if it's manual user keyboard typing
+            }
+
+            if (e.key === 'Enter') {
+                if (barcodeBuffer.length > 2) {
+                    handleScannedBarcode(barcodeBuffer);
+                    barcodeBuffer = "";
+                    e.preventDefault();
+                }
+            } else if (e.key.length === 1) {
+                barcodeBuffer += e.key;
+            }
+            lastKeyTime = currentTime;
+        });
 
         window.onload = function() {
             changeLanguage(state.settings.lang);
@@ -626,7 +584,7 @@
             localStorage.setItem('pro_shop_settings', JSON.stringify(state.settings));
         }
 
-        // TABS
+        // TABS NAVIGATION
         function switchTab(tabId) {
             const sections = ['dashboard', 'pos', 'inventory', 'customers', 'reports', 'settings'];
             sections.forEach(sec => {
@@ -636,6 +594,11 @@
 
             document.getElementById(`section-${tabId}`).classList.remove('hidden');
             document.getElementById(`nav-${tabId}`).className = "flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-xl bg-indigo-600 text-white font-bold transition-all";
+
+            // Stop Camera Stream if navigating away from POS to free resource
+            if (tabId !== 'pos') {
+                stopInlineCamera();
+            }
 
             if (tabId === 'dashboard') renderDashboard();
             if (tabId === 'pos') {
@@ -648,7 +611,6 @@
             if (tabId === 'settings') loadSettingsForm();
         }
 
-        // AUTO-FOCUS ON BARCODE INPUT
         function focusScannerInput() {
             setTimeout(() => {
                 const scannerInput = document.getElementById('pos-scanner-input');
@@ -659,41 +621,29 @@
             }, 150);
         }
 
-        document.addEventListener('click', function(e) {
-            const posSec = document.getElementById('section-pos');
-            if (posSec && !posSec.classList.contains('hidden')) {
-                const scannerInput = document.getElementById('pos-scanner-input');
-                const target = e.target;
-                if (scannerInput && 
-                    target !== scannerInput && 
-                    !target.closest('.no-refocus') && 
-                    target.tagName !== 'INPUT' && 
-                    target.tagName !== 'SELECT' && 
-                    target.tagName !== 'BUTTON') {
-                        scannerInput.focus();
-                }
-            }
-        });
-
         function handlePOSScannerKeyPress(e) {
             if (e.key === 'Enter') {
-                handlePOSBarcodeSubmit();
+                const scannerInput = document.getElementById('pos-scanner-input');
+                const barcode = scannerInput.value.trim();
+                if (barcode !== "") {
+                    handleScannedBarcode(barcode);
+                    scannerInput.value = '';
+                }
             }
         }
 
-        function handlePOSBarcodeSubmit() {
-            const scannerInput = document.getElementById('pos-scanner-input');
-            const barcode = scannerInput.value.trim();
-            if (barcode === "") return;
-
+        // UNIFIED BARCODE HANDLER (Both Camera and Hardware Gun)
+        function handleScannedBarcode(barcode) {
+            barcode = barcode.trim();
             const product = state.products.find(p => p.barcode === barcode);
+            
             if (product) {
                 if (product.stock <= 0) {
                     playAudioTone('error');
                     Swal.fire({
                         icon: 'error',
                         title: state.settings.lang === 'ar' ? 'نفذت السلعة' : 'Stock Épuisé',
-                        text: state.settings.lang === 'ar' ? 'هذا المنتج نفذ من المخزن بالكامل!' : 'Cet article est en rupture de stock.',
+                        text: state.settings.lang === 'ar' ? 'هذا المنتج نفذ من المخزن بالكامل!' : 'Cet article est épuisé.',
                         confirmButtonColor: '#4f46e5'
                     });
                 } else {
@@ -704,10 +654,10 @@
                 playAudioTone('error');
                 Swal.fire({
                     icon: 'warning',
-                    title: state.settings.lang === 'ar' ? 'غير مسجل' : 'Inconnu',
-                    text: state.settings.lang === 'ar' ? `السلعة ذات الباركود (${barcode}) غير موجودة بالمخزن. هل تريد إضافتها الآن؟` : `Le produit avec code-barres (${barcode}) n'existe pas. Voulez-vous l'ajouter ?`,
+                    title: state.settings.lang === 'ar' ? 'سلعة غير مسجلة' : 'Produit Inconnu',
+                    text: state.settings.lang === 'ar' ? `السلعة ذات الباركود (${barcode}) غير موجودة. هل تريد تسجيلها في المخزن؟` : `Le code (${barcode}) n'existe pas. Voulez-vous l'ajouter ?`,
                     showCancelButton: true,
-                    confirmButtonText: state.settings.lang === 'ar' ? 'إضافة المنتج' : 'Ajouter',
+                    confirmButtonText: state.settings.lang === 'ar' ? 'تسجيل السلعة' : 'Ajouter',
                     cancelButtonText: state.settings.lang === 'ar' ? 'إلغاء' : 'Annuler',
                     confirmButtonColor: '#4f46e5'
                 }).then((result) => {
@@ -717,7 +667,6 @@
                     }
                 });
             }
-            scannerInput.value = '';
             focusScannerInput();
         }
 
@@ -731,18 +680,18 @@
                 gain.connect(ctx.destination);
                 
                 if (type === 'success') {
-                    osc.frequency.setValueAtTime(950, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    osc.frequency.setValueAtTime(1000, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.08);
+                    osc.stop(ctx.currentTime + 0.07);
                 } else {
-                    osc.frequency.setValueAtTime(250, ctx.currentTime);
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
                     gain.gain.setValueAtTime(0.12, ctx.currentTime);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.3);
+                    osc.stop(ctx.currentTime + 0.25);
                 }
             } catch (err) {
-                console.error("Audio API blocked or not supported:", err);
+                console.warn("Audio blocked:", err);
             }
         }
 
@@ -790,7 +739,82 @@
         }
 
         // ==========================================
-        // SECTION 1: DASHBOARD
+        // PERSISTENT CONTINUOUS INLINE CAMERA ENGINE
+        // ==========================================
+        function toggleInlineCamera() {
+            if (isCamRunning) {
+                stopInlineCamera();
+            } else {
+                startInlineCamera();
+            }
+        }
+
+        function startInlineCamera() {
+            const btn = document.getElementById('btn-toggle-cam');
+            const warningBox = document.getElementById('inline-file-warning');
+            const placeholder = document.getElementById('inline-reader-placeholder');
+            const readerDiv = document.getElementById('inline-reader');
+
+            if (window.location.protocol === 'file:') {
+                warningBox.classList.remove('hidden');
+            }
+
+            placeholder.classList.add('hidden');
+            readerDiv.style.height = "200px";
+
+            inlineScanner = new Html5Qrcode("inline-reader");
+            inlineScanner.start(
+                { facingMode: "environment" },
+                { fps: 15, qrbox: { width: 180, height: 180 } },
+                (decodedText) => {
+                    // Fast scan feedback - does not close the stream!
+                    handleScannedBarcode(decodedText);
+                },
+                () => {} // Quiet frame capture failures
+            ).then(() => {
+                isCamRunning = true;
+                btn.innerHTML = `<i class="fa-solid fa-circle-stop mr-1"></i> <span>${state.settings.lang === 'ar' ? 'إيقاف الكاميرا' : 'Arrêter'}</span>`;
+                btn.className = "bg-red-500 hover:bg-red-600 text-white text-[10px] px-3 py-1 rounded-lg font-bold transition-all";
+                document.getElementById('cam-pulse-dot').classList.add('bg-emerald-500');
+                document.getElementById('cam-pulse-dot').classList.remove('bg-slate-600');
+            }).catch(err => {
+                console.error("Camera startup failed:", err);
+                Swal.fire({ icon: 'error', text: 'تعذر تشغيل الكاميرا. يرجى تفعيل الصلاحيات أو استخدام خادم محلي Localhost.' });
+                stopInlineCamera();
+            });
+        }
+
+        function stopInlineCamera() {
+            const btn = document.getElementById('btn-toggle-cam');
+            const placeholder = document.getElementById('inline-reader-placeholder');
+            const readerDiv = document.getElementById('inline-reader');
+
+            if (inlineScanner && isCamRunning) {
+                inlineScanner.stop().then(() => {
+                    finalizeStop();
+                }).catch(() => {
+                    finalizeStop();
+                });
+            } else {
+                finalizeStop();
+            }
+
+            function finalizeStop() {
+                isCamRunning = false;
+                inlineScanner = null;
+                readerDiv.innerHTML = '';
+                readerDiv.appendChild(placeholder);
+                placeholder.classList.remove('hidden');
+                readerDiv.style.height = "140px";
+                btn.innerHTML = `<i class="fa-solid fa-video mr-1"></i> <span>${state.settings.lang === 'ar' ? 'تشغيل الكاميرا' : 'Démarrer'}</span>`;
+                btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] px-3 py-1 rounded-lg font-bold transition-all";
+                document.getElementById('cam-pulse-dot').classList.remove('bg-emerald-500');
+                document.getElementById('cam-pulse-dot').classList.add('bg-slate-600');
+            }
+        }
+
+        // ==========================================
+        // DASHBOARD SYSTEM
         // ==========================================
         function renderDashboard() {
             const totalSales = state.sales.reduce((sum, s) => sum + s.grandTotal, 0);
@@ -903,9 +927,9 @@
             const cardLbl = document.getElementById('pay-card-label');
             const debtLbl = document.getElementById('pay-debt-label');
 
-            cashLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer transition-all " + (method === 'CASH' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-700 border-slate-200');
-            cardLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer transition-all " + (method === 'CARD' ? 'bg-sky-500 text-white border-sky-500' : 'bg-white text-slate-700 border-slate-200');
-            debtLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-xs font-bold cursor-pointer transition-all " + (method === 'DEBT' ? 'bg-red-500 text-white border-red-500' : 'bg-white text-slate-700 border-slate-200');
+            cashLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer transition-all " + (method === 'CASH' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-slate-700 border-slate-200');
+            cardLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer transition-all " + (method === 'CARD' ? 'bg-sky-500 text-white border-sky-500' : 'bg-white text-slate-700 border-slate-200');
+            debtLbl.className = "border rounded px-2 py-1 flex items-center justify-center text-[10px] font-bold cursor-pointer transition-all " + (method === 'DEBT' ? 'bg-red-500 text-white border-red-500' : 'bg-white text-slate-700 border-slate-200');
         }
 
         function filterPOSProducts() {
@@ -1035,19 +1059,19 @@
 
             state.cart.forEach(item => {
                 const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-3 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all";
+                div.className = "flex items-center justify-between p-2 border border-slate-100 rounded-xl hover:bg-slate-50 transition-all";
                 div.innerHTML = `
                     <div class="flex-1 min-w-0 pr-2">
-                        <span class="font-bold text-slate-800 text-xs block truncate">${state.settings.lang === 'ar' ? item.nameAr : item.nameFr}</span>
-                        <span class="text-[10px] text-slate-400 font-bold">${item.price.toFixed(2)}</span>
+                        <span class="font-bold text-slate-800 text-[11px] block truncate">${state.settings.lang === 'ar' ? item.nameAr : item.nameFr}</span>
+                        <span class="text-[9px] text-slate-400 font-bold">${item.price.toFixed(2)}</span>
                     </div>
                     <div class="flex items-center space-x-1 space-x-reverse no-refocus">
-                        <button onclick="updateCartQty('${item.barcode}', ${item.qty - 1})" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center text-xs font-bold">-</button>
-                        <input type="number" onchange="updateCartQty('${item.barcode}', this.value)" class="w-10 border border-slate-150 rounded-lg text-center text-xs py-0.5 font-bold" value="${item.qty}">
-                        <button onclick="updateCartQty('${item.barcode}', ${item.qty + 1})" class="w-6 h-6 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center text-xs font-bold">+</button>
+                        <button onclick="updateCartQty('${item.barcode}', ${item.qty - 1})" class="w-5 h-5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded flex items-center justify-center text-xs font-bold">-</button>
+                        <input type="number" onchange="updateCartQty('${item.barcode}', this.value)" class="w-8 border border-slate-150 rounded text-center text-xs py-0.5 font-bold" value="${item.qty}">
+                        <button onclick="updateCartQty('${item.barcode}', ${item.qty + 1})" class="w-5 h-5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded flex items-center justify-center text-xs font-bold">+</button>
                     </div>
-                    <div class="text-end pl-2 min-w-[70px]">
-                        <span class="font-bold text-slate-800 text-xs">${(item.price * item.qty).toFixed(2)}</span>
+                    <div class="text-end pl-2 min-w-[60px]">
+                        <span class="font-bold text-slate-800 text-[11px]">${(item.price * item.qty).toFixed(2)}</span>
                     </div>
                 `;
                 container.appendChild(div);
@@ -1135,8 +1159,8 @@
             Swal.fire({
                 icon: 'success',
                 title: state.settings.lang === 'ar' ? 'تمت العملية بنجاح' : 'Succès',
-                text: state.settings.lang === 'ar' ? 'تم حفظ المعاملة بنجاح، جاري فتح طباعة الفاتورة.' : 'Transaction enregistrée.',
-                timer: 1500,
+                text: state.settings.lang === 'ar' ? 'تمت العملية، جاري طباعة الفاتورة.' : 'Succès.',
+                timer: 1000,
                 showConfirmButton: false
             }).then(() => {
                 window.print();
@@ -1154,19 +1178,19 @@
             `).join('');
 
             printArea.innerHTML = `
-                <div class="text-center">
-                    <h2 class="text-base font-extrabold mb-1">${state.settings.storeName}</h2>
-                    <p class="text-[9px] text-gray-500">فاتورة بيع رقم: INV-${sale.id}</p>
+                <div class="text-center text-[10px]">
+                    <h2 class="text-sm font-extrabold mb-1">${state.settings.storeName}</h2>
+                    <p class="text-[8px] text-gray-500">فاتورة بيع رقم: INV-${sale.id}</p>
                     <div class="border-b border-dashed border-gray-400 my-2"></div>
-                    <div class="flex justify-between text-[9px] mb-1 text-start">
+                    <div class="flex justify-between mb-1 text-start">
                         <span>التاريخ: ${new Date(sale.date).toLocaleString()}</span>
                     </div>
-                    <div class="text-[9px] text-start mb-2">
+                    <div class="text-start mb-2">
                         <span>العميل: ${sale.customer}</span> <br>
                         <span>طريقة الدفع: ${sale.payMethod}</span>
                     </div>
                     <div class="border-b border-gray-300 my-2"></div>
-                    <table class="w-full text-[9px] text-start">
+                    <table class="w-full text-start">
                         <thead>
                             <tr class="border-b border-gray-300 font-bold">
                                 <th class="py-1 text-start">الصنف</th>
@@ -1178,7 +1202,7 @@
                             ${rows}
                         </tbody>
                     </table>
-                    <div class="border-t border-dashed border-gray-400 mt-3 pt-2 text-[9px] space-y-1">
+                    <div class="border-t border-dashed border-gray-400 mt-3 pt-2 space-y-1">
                         <div class="flex justify-between">
                             <span>المجموع الفرعي:</span>
                             <span>${sale.subtotal.toFixed(2)} ${state.settings.currency}</span>
@@ -1191,14 +1215,10 @@
                             <span>الضريبة:</span>
                             <span>+${taxAmt.toFixed(2)} ${state.settings.currency}</span>
                         </div>
-                        <div class="flex justify-between font-extrabold text-[11px] border-t pt-1">
+                        <div class="flex justify-between font-extrabold border-t pt-1">
                             <span>الإجمالي النهائي:</span>
                             <span>${sale.grandTotal.toFixed(2)} ${state.settings.currency}</span>
                         </div>
-                    </div>
-                    <div class="border-t border-dashed border-gray-400 mt-4 pt-2 text-center text-[8px] text-gray-400">
-                        <p>شكرًا لتسوقكم معنا!</p>
-                        <p>Merci pour votre visite!</p>
                     </div>
                 </div>
             `;
@@ -1303,36 +1323,19 @@
             saveToStorage();
             closeProductModal();
             renderInventoryTable();
-            Swal.fire({
-                icon: 'success',
-                title: state.settings.lang === 'ar' ? 'تم حفظ السلعة' : 'Produit enregistré',
-                timer: 1000,
-                showConfirmButton: false
-            });
+            Swal.fire({ icon: 'success', text: 'تم حفظ السلعة', timer: 1000, showConfirmButton: false });
         }
 
         function deleteProduct(index) {
-            Swal.fire({
-                title: state.settings.lang === 'ar' ? 'هل أنت متأكد؟' : 'Êtes-vous sûr ?',
-                text: state.settings.lang === 'ar' ? 'سيتم حذف هذا الصنف بالكامل من المخزن ولن تتمكن من استرجاعه!' : 'Cela effacera définitivement l\'article.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: state.settings.lang === 'ar' ? 'نعم، احذفه' : 'Oui, supprimer',
-                cancelButtonText: state.settings.lang === 'ar' ? 'إلغاء' : 'Annuler'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    state.products.splice(index, 1);
-                    saveToStorage();
-                    renderInventoryTable();
-                    Swal.fire({ icon: 'success', title: state.settings.lang === 'ar' ? 'تم الحذف' : 'Supprimé', timer: 1000, showConfirmButton: false });
-                }
-            });
+            if (confirm(state.settings.lang === 'ar' ? "حذف السلعة نهائياً؟" : "Supprimer ?")) {
+                state.products.splice(index, 1);
+                saveToStorage();
+                renderInventoryTable();
+            }
         }
 
         // ==========================================
-        // SECTION 4: CUSTOMERS & DEBTS
+        // SECTION 4: CUSTOMERS
         // ==========================================
         function renderCustomersTable() {
             const tableBody = document.getElementById('customers-table-body');
@@ -1363,34 +1366,29 @@
         function settleCustomerDebt(index) {
             const c = state.customers[index];
             if (c.debt <= 0) {
-                Swal.fire({
-                    icon: 'info',
-                    text: state.settings.lang === 'ar' ? 'هذا العميل لا يملك أي ديون سابقة لتسديدها.' : 'Aucune dette à régler.',
-                    confirmButtonColor: '#4f46e5'
-                });
+                Swal.fire({ icon: 'info', text: 'لا يوجد ديون مستحقة لتسديدها لهذا العميل' });
                 return;
             }
 
             Swal.fire({
-                title: state.settings.lang === 'ar' ? 'تسديد ديون العميل' : 'Régler la dette',
-                text: `${state.settings.lang === 'ar' ? 'إجمالي ديون العميل الحالية:' : 'Dette totale actuelle:'} ${c.debt.toFixed(2)} ${state.settings.currency}`,
+                title: 'تسديد ديون العميل',
+                text: `ديون العميل الحالية: ${c.debt.toFixed(2)} ${state.settings.currency}`,
                 input: 'number',
                 inputAttributes: { min: 0, step: 0.01 },
-                inputLabel: state.settings.lang === 'ar' ? 'المبلغ المراد تسديده' : 'Montant à payer',
+                inputLabel: 'المبلغ المدفوع للتسديد',
                 showCancelButton: true,
                 confirmButtonColor: '#10b981',
-                confirmButtonText: state.settings.lang === 'ar' ? 'تأكيد التسديد' : 'Confirmer',
-                cancelButtonText: state.settings.lang === 'ar' ? 'إلغاء' : 'Annuler'
+                confirmButtonText: 'تأكيد التسديد'
             }).then((result) => {
                 if (result.isConfirmed && result.value) {
                     const payAmt = parseFloat(result.value);
                     if (payAmt > c.debt) {
-                        Swal.fire({ icon: 'error', text: state.settings.lang === 'ar' ? 'المبلغ المدخل أكبر من مديونية العميل!' : 'Montant excessif' });
+                        Swal.fire({ icon: 'error', text: 'المبلغ المدخل يتعدى ديون العميل!' });
                     } else {
                         c.debt -= payAmt;
                         saveToStorage();
                         renderCustomersTable();
-                        Swal.fire({ icon: 'success', text: state.settings.lang === 'ar' ? 'تم تسجيل الدفعة وتحديث الرصيد' : 'Dette mise à jour' });
+                        Swal.fire({ icon: 'success', text: 'تم تسجيل السداد وتحديث الرصيد.' });
                     }
                 }
             });
@@ -1446,11 +1444,11 @@
             saveToStorage();
             closeCustomerModal();
             renderCustomersTable();
-            Swal.fire({ icon: 'success', title: state.settings.lang === 'ar' ? 'تم الحفظ بنجاح' : 'Enregistré', timer: 1000, showConfirmButton: false });
+            Swal.fire({ icon: 'success', text: 'تم حفظ العميل' });
         }
 
         function deleteCustomer(index) {
-            if (confirm(state.settings.lang === 'ar' ? "حذف ملف هذا العميل نهائياً؟" : "Supprimer ?")) {
+            if (confirm("حذف العميل نهائياً؟")) {
                 state.customers.splice(index, 1);
                 saveToStorage();
                 renderCustomersTable();
@@ -1523,7 +1521,7 @@
             state.settings.taxRate = parseFloat(document.getElementById('set-default-tax').value) || 0;
             saveToStorage();
             
-            Swal.fire({ icon: 'success', text: state.settings.lang === 'ar' ? 'تم تحديث الإعدادات بنجاح' : 'Paramètres mis à jour' });
+            Swal.fire({ icon: 'success', text: 'تم تحديث الإعدادات بنجاح.' });
             changeLanguage(state.settings.lang);
             switchTab('dashboard');
         }
@@ -1553,86 +1551,17 @@
                     if (parsed.products && parsed.customers && parsed.sales && parsed.settings) {
                         state = parsed;
                         saveToStorage();
-                        Swal.fire({
-                            icon: 'success',
-                            text: state.settings.lang === 'ar' ? 'تم استيراد قاعدة البيانات بنجاح وتحديث كافة السجلات!' : 'Base de données importée avec succès !'
-                        }).then(() => {
+                        Swal.fire({ icon: 'success', text: 'تم استيراد قاعدة البيانات بنجاح !' }).then(() => {
                             window.location.reload();
                         });
                     } else {
-                        throw new Error("Invalid schema");
+                        throw new Error("Bad JSON schema");
                     }
                 } catch (err) {
-                    Swal.fire({
-                        icon: 'error',
-                        text: state.settings.lang === 'ar' ? 'خطأ في قراءة ملف قاعدة البيانات المرفق، يرجى التحقق من صحته.' : 'Fichier de sauvegarde invalide.'
-                    });
+                    Swal.fire({ icon: 'error', text: 'ملف غير صالح.' });
                 }
             };
             reader.readAsText(file);
-        }
-
-        // ========================================================
-        // ADVANCED CAMERA AND IMAGE FALLBACK SCANNER ENGINE (UPDATED)
-        // ========================================================
-        function openCameraScanner(targetInputId) {
-            const cameraModal = document.getElementById('camera-modal');
-            const warningBox = document.getElementById('file-protocol-warning');
-            cameraModal.classList.remove('hidden');
-
-            // 1. Check if opened via file:// protocol
-            if (window.location.protocol === 'file:') {
-                warningBox.classList.remove('hidden');
-            } else {
-                warningBox.classList.add('hidden');
-            }
-
-            // 2. Prepare HTML5-QRCode Configuration
-            // We use the stable Html5QrcodeScanner class which handles camera initialization,
-            // camera selector dropdown, permission errors, and has a built-in file upload scanner.
-            const config = { 
-                fps: 15, 
-                qrbox: { width: 250, height: 250 },
-                rememberLastUsedCamera: true,
-                aspectRatio: 1.33
-            };
-            
-            // Clear previous scanner content
-            document.getElementById('reader').innerHTML = '';
-            
-            html5QrScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
-            
-            function onScanSuccess(decodedText, decodedResult) {
-                document.getElementById(targetInputId).value = decodedText;
-                playAudioTone('success');
-                closeCameraScanner();
-                
-                // If it was the POS search field, trigger the transaction automatically
-                if (targetInputId === 'pos-scanner-input') {
-                    handlePOSBarcodeSubmit();
-                }
-            }
-
-            function onScanError(errorMessage) {
-                // Keep console clean from continuous scan frame failures
-            }
-
-            // Start rendering the scanner UI
-            html5QrScanner.render(onScanSuccess, onScanError);
-        }
-
-        function closeCameraScanner() {
-            const cameraModal = document.getElementById('camera-modal');
-            cameraModal.classList.add('hidden');
-            if (html5QrScanner) {
-                html5QrScanner.clear().then(() => {
-                    html5QrScanner = null;
-                }).catch(err => {
-                    console.error("Failed to clear scanner gracefully:", err);
-                    html5QrScanner = null;
-                    document.getElementById('reader').innerHTML = ''; // Force clear
-                });
-            }
         }
     </script>
 </body>
