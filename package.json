@@ -10,14 +10,36 @@
     "dist": "electron-builder --publish never"
   },
   "devDependencies": {
-    "electron": "^22.3.27",
-    "electron-builder": "^24.9.1"
+    "electron": "19.1.9",
+    "electron-builder": "24.9.1"
   },
   "build": {
     "appId": "com.aitchikh.pos",
     "productName": "Aitchikh POS",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/.cache/**/*"
+    ],
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aitchikh POS"
     }
   }
 }
