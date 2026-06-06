@@ -471,8 +471,14 @@
                 <input type="hidden" id="prod-index">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500 mb-1">Code-barres / Barcode</label>
-                        <input type="text" id="prod-barcode" required class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-mono font-bold">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[10px] font-bold text-slate-500">Code-barres / Barcode</label>
+                            <span class="text-[9px] text-brand-600 font-bold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                                <span>Scanner prêt / القارئ جاهز</span>
+                            </span>
+                        </div>
+                        <input type="text" id="prod-barcode" required class="w-full border border-slate-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-brand-500 text-xs font-mono font-bold" placeholder="Scannez avec la douchette...">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 mb-1">Catégorie</label>
@@ -752,6 +758,10 @@
         // Global keydown event for Barcode scanner redirection to focus input
         document.addEventListener('keydown', function(e) {
             const posSec = document.getElementById('section-pos');
+            const prodModal = document.getElementById('product-modal');
+            
+            // If product modal is open, do not redirect focus to POS scanner input
+            if (prodModal && !prodModal.classList.contains('hidden')) return;
             if (!posSec || posSec.classList.contains('hidden')) return;
 
             // Redirect focused input
@@ -765,6 +775,18 @@
                 input.focus();
             }
         });
+
+        // Prevent standard scanner Enter action on the Product form barcode field
+        const prodBarcodeField = document.getElementById('prod-barcode');
+        if (prodBarcodeField) {
+            prodBarcodeField.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Stop form submission
+                    const nextField = document.getElementById('prod-category');
+                    if (nextField) nextField.focus(); // Focus on Category field next
+                }
+            });
+        }
 
         // Tab selection engine
         window.switchTab = function(tabId) {
@@ -1422,6 +1444,14 @@
                 document.getElementById('prod-index').value = '';
             }
             modal.classList.remove('hidden');
+
+            // Autofocus barcode input inside modal for instant scanning
+            setTimeout(() => {
+                const barcodeInput = document.getElementById('prod-barcode');
+                if (barcodeInput) {
+                    barcodeInput.focus();
+                }
+            }, 150);
         };
 
         window.closeProductModal = function() {
