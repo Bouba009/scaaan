@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="fr" dir="ltr" class="h-full bg-slate-50">
 <head>
@@ -35,7 +33,7 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=300;400;600;700;800&family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body { font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif; }
@@ -132,56 +130,82 @@
     <div class="flex flex-1 overflow-hidden">
         <!-- SIDEBAR -->
         <aside class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between shrink-0 hidden md:flex">
-            <div class="flex-1 flex flex-col justify-between overflow-y-auto">
-                <nav class="p-4 space-y-1" id="sidebar-nav">
-                    <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
-                        <i class="fa-solid fa-chart-pie text-lg text-brand-600"></i>
-                        <span data-i18n="nav_dashboard">Tableau de Bord</span>
-                    </a>
-                    <a href="#" onclick="switchTab('pos')" id="nav-pos" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
-                        <i class="fa-solid fa-barcode text-lg text-emerald-600"></i>
-                        <span data-i18n="nav_pos">Point de Vente (Caisse)</span>
-                    </a>
-                    <a href="#" onclick="switchTab('inventory')" id="nav-inventory" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
-                        <i class="fa-solid fa-boxes-packing text-lg text-amber-500"></i>
-                        <span data-i18n="nav_inventory">Produits & Stock</span>
-                    </a>
-                    <a href="#" onclick="switchTab('customers')" id="nav-customers" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
-                        <i class="fa-solid fa-users text-lg text-sky-500"></i>
-                        <span data-i18n="nav_customers">Clients & Crédits</span>
-                    </a>
-                    <a href="#" onclick="switchTab('reports')" id="nav-reports" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
-                        <i class="fa-solid fa-chart-line text-lg text-rose-500"></i>
-                        <span data-i18n="nav_reports">Rapports & Ventes</span>
-                    </a>
-                </nav>
+            <nav class="p-4 space-y-1" id="sidebar-nav">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-chart-pie text-lg text-brand-600"></i>
+                    <span data-i18n="nav_dashboard">Tableau de Bord</span>
+                </a>
+                <a href="#" onclick="switchTab('pos')" id="nav-pos" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-barcode text-lg text-emerald-600"></i>
+                    <span data-i18n="nav_pos">Point de Vente (Caisse)</span>
+                </a>
+                <a href="#" onclick="switchTab('inventory')" id="nav-inventory" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-boxes-packing text-lg text-amber-500"></i>
+                    <span data-i18n="nav_inventory">Produits & Stock</span>
+                </a>
+                <a href="#" onclick="switchTab('customers')" id="nav-customers" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-users text-lg text-sky-500"></i>
+                    <span data-i18n="nav_customers">Clients & Crédits</span>
+                </a>
+                <a href="#" onclick="switchTab('reports')" id="nav-reports" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-chart-line text-lg text-rose-500"></i>
+                    <span data-i18n="nav_reports">Rapports & Ventes</span>
+                </a>
+            </nav>
 
-                <!-- SECTION: KEYBOARD SHORTCUTS GUIDE -->
-                <div class="px-4 py-3 mx-4 mb-4 bg-slate-50 rounded-2xl border border-slate-150 space-y-2 shrink-0 shadow-sm">
-                    <h4 class="text-[10px] font-extrabold text-slate-700 flex items-center gap-1.5 uppercase">
+            <!-- SECTION NOUVEAU RACCOURCIS CLAVIER / قسم اختصارات لوحة المفاتيح -->
+            <div class="px-4 py-3 mx-4 my-2 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                <div class="flex items-center justify-between text-slate-700 font-bold text-[11px] cursor-pointer select-none" onclick="toggleShortcutsGuide()">
+                    <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-keyboard text-brand-600"></i>
-                        <span data-i18n="kbd_title">Raccourcis Clavier</span>
-                    </h4>
-                    <div class="grid grid-cols-2 gap-1.5 text-[9px] font-semibold text-slate-600">
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F1</kbd> <span data-i18n="kbd_dash">Tab. de Bord</span></div>
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F2</kbd> <span data-i18n="kbd_pos">Caisse</span></div>
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F3</kbd> <span data-i18n="kbd_inv">Stock</span></div>
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F4</kbd> <span data-i18n="kbd_cust">Clients</span></div>
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F8</kbd> <span data-i18n="kbd_rep">Rapports</span></div>
-                        <div class="flex items-center gap-1"><kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F10</kbd> <span data-i18n="kbd_focus">Focus Caisse</span></div>
-                        <div class="flex items-center gap-1 col-span-2 border-t border-slate-200 pt-1.5 mt-0.5">
-                            <kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F9</kbd> <span data-i18n="kbd_checkout">Valider la Vente</span>
-                        </div>
-                        <div class="flex items-center gap-1 col-span-2">
-                            <kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">ESC</kbd> <span data-i18n="kbd_clear">Vider le Panier</span>
-                        </div>
-                        <div class="flex items-center gap-1 col-span-2">
-                            <kbd class="bg-white border border-slate-200 px-1 py-0.5 rounded shadow-sm text-slate-800 font-mono font-bold">F6</kbd> <span data-i18n="kbd_new">Nouveau</span>
-                        </div>
+                        <span>Raccourcis Clavier / اختصارات</span>
+                    </div>
+                    <i id="shortcuts-toggle-icon" class="fa-solid fa-chevron-down text-[9px] text-slate-400 transition-transform duration-200"></i>
+                </div>
+                <div id="shortcuts-list-container" class="hidden grid grid-cols-1 gap-1 text-[9px] text-slate-600 font-medium pt-1 border-t border-slate-200/60">
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F1</span>
+                        <span class="text-right text-[8px] text-slate-500">Dashboard / لوحة التحكم</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F2</span>
+                        <span class="text-right text-[8px] text-slate-500">POS Caisse / نقطة البيع</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F3</span>
+                        <span class="text-right text-[8px] text-slate-500">Stock & Prod / السلع والمخزون</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F4</span>
+                        <span class="text-right text-[8px] text-slate-500">Clients & Crédits / العملاء</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F8</span>
+                        <span class="text-right text-[8px] text-slate-500">Rapports / تقارير المبيعات</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F6</span>
+                        <span class="text-right text-[8px] text-slate-500">Focus Lecteur / تفعيل القارئ</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F7</span>
+                        <span class="text-right text-[8px] text-slate-500">Nouveau / إضافة عنصر جديد</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F9</span>
+                        <span class="text-right text-[8px] text-slate-500">Vider Panier / تفريغ السلة</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">F10</span>
+                        <span class="text-right text-[8px] text-slate-500">Facturer / الدفع والطباعة</span>
+                    </div>
+                    <div class="flex justify-between items-center py-0.5">
+                        <span class="bg-white border px-1 rounded font-mono font-bold text-slate-800 shadow-sm">ESC</span>
+                        <span class="text-right text-[8px] text-slate-500">Quitter / إغلاق النوافذ</span>
                     </div>
                 </div>
             </div>
-            
+
             <div class="p-4 border-t border-slate-100 text-[10px] text-slate-400 text-center">
                 <span>Enterprise POS Pro &copy; 2026</span>
             </div>
@@ -328,7 +352,7 @@
                         
                         <!-- Real-time invisible listener text helper -->
                         <div class="relative">
-                            <input type="text" id="pos-scanner-input" class="w-full bg-brand-900/50 border border-brand-800 text-center rounded-xl py-3 text-xs font-mono font-bold tracking-widest text-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-brand-900/80 transition-all douchette-active" placeholder="Scanner un Code-Barres..." autocomplete="off">
+                            <input type="text" id="pos-scanner-input" onkeypress="handlePOSScannerKeyPress(e)" class="w-full bg-brand-900/50 border border-brand-800 text-center rounded-xl py-3 text-xs font-mono font-bold tracking-widest text-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-brand-900/80 transition-all douchette-active" placeholder="Scanner un Code-Barres..." autocomplete="off">
                             <div class="text-[9px] text-brand-300/80 text-center mt-2 font-medium">L'écouteur est actif. Visez simplement avec votre douchette</div>
                         </div>
                     </div>
@@ -653,10 +677,7 @@
                 dash_overview: "Activités & Performances Financières", stat_day: "Recettes Jour", stat_month: "Mois Actuel",
                 stat_last_month: "Mois Dernier", stat_expenses: "Dépenses", stat_credits: "Total Crédits",
                 out_of_stock_title: "Ruptures de Stock Actuelles (Zéro quantité)", sales_chart: "Analyse Mensuelle & Comparaison des Ventes",
-                compar_months: "Comparatifs Mensuels",
-                kbd_title: "Raccourcis Clavier", kbd_dash: "Tab. de Bord", kbd_pos: "Caisse",
-                kbd_inv: "Stock", kbd_cust: "Clients", kbd_rep: "Rapports", kbd_focus: "Focus Caisse",
-                kbd_checkout: "Valider la Vente", kbd_clear: "Vider le Panier", kbd_new: "Nouveau"
+                compar_months: "Comparatifs Mensuels"
             },
             ar: {
                 nav_dashboard: "لوحة التحكم", nav_pos: "نقطة البيع (الكاشير)", nav_inventory: "المنتجات والمخزون",
@@ -664,10 +685,7 @@
                 dash_overview: "النشاط والأداء المالي للمحل", stat_day: "مداخيل اليوم", stat_month: "مداخيل الشهر الحالي",
                 stat_last_month: "مداخيل الشهر الماضي", stat_expenses: "النفقات", stat_credits: "إجمالي القروض والكريدي",
                 out_of_stock_title: "السلع التي نفذ مخزونها تماماً (0 كمية)", sales_chart: "مؤشر المبيعات ومقارنات الشهور",
-                compar_months: "مقارنة الأشهر السابقة",
-                kbd_title: "اختصارات لوحة المفاتيح", kbd_dash: "لوحة التحكم", kbd_pos: "الكاشير",
-                kbd_inv: "المخزون", kbd_cust: "العملاء", kbd_rep: "التقارير", kbd_focus: "تركيز القارئ",
-                kbd_checkout: "حفظ وطباعة البيع", kbd_clear: "إفراغ السلة", kbd_new: "إضافة جديدة"
+                compar_months: "مقارنة الأشهر السابقة"
             }
         };
 
@@ -791,75 +809,9 @@
             switchTab('dashboard');
         }
 
-        // Global keydown event for Barcode scanner redirection to focus input & keyboard shortcuts
+        // Global keydown event for Barcode scanner redirection to focus input
         document.addEventListener('keydown', function(e) {
-            // -- KEYBOARD SHORTCUTS ENGINE --
-            // 1. Navigation shortcuts
-            if (e.key === 'F1') {
-                e.preventDefault();
-                window.switchTab('dashboard');
-                return;
-            } else if (e.key === 'F2') {
-                e.preventDefault();
-                window.switchTab('pos');
-                return;
-            } else if (e.key === 'F3') {
-                e.preventDefault();
-                window.switchTab('inventory');
-                return;
-            } else if (e.key === 'F4') {
-                e.preventDefault();
-                window.switchTab('customers');
-                return;
-            } else if (e.key === 'F8') {
-                e.preventDefault();
-                window.switchTab('reports');
-                return;
-            }
-
-            // 2. POS specific shortcuts (only active when POS is visible)
             const posSec = document.getElementById('section-pos');
-            if (posSec && !posSec.classList.contains('hidden')) {
-                if (e.key === 'F9') {
-                    e.preventDefault();
-                    window.checkout();
-                    return;
-                } else if (e.key === 'Escape') {
-                    const prodModal = document.getElementById('product-modal');
-                    const custModal = document.getElementById('customer-modal');
-                    const expModal = document.getElementById('expense-modal');
-                    
-                    const isAnyModalOpen = (prodModal && !prodModal.classList.contains('hidden')) || 
-                                           (custModal && !custModal.classList.contains('hidden')) || 
-                                           (expModal && !expModal.classList.contains('hidden'));
-                                           
-                    if (!isAnyModalOpen) {
-                        e.preventDefault();
-                        window.clearCart();
-                        return;
-                    }
-                } else if (e.key === 'F10') {
-                    e.preventDefault();
-                    const input = document.getElementById('pos-scanner-input');
-                    if (input) input.focus();
-                    return;
-                }
-            }
-
-            // 3. Dynamic context-aware add items (F6 or Alt+N)
-            if (e.key === 'F6' || (e.altKey && e.key === 'n')) {
-                e.preventDefault();
-                const invSec = document.getElementById('section-inventory');
-                const custSec = document.getElementById('section-customers');
-                if (invSec && !invSec.classList.contains('hidden')) {
-                    window.openProductModal();
-                    return;
-                } else if (custSec && !custSec.classList.contains('hidden')) {
-                    window.openCustomerModal();
-                    return;
-                }
-            }
-
             const prodModal = document.getElementById('product-modal');
             
             // If product modal is open, do not redirect focus to POS scanner input
@@ -1240,6 +1192,15 @@
             });
         };
 
+        window.handlePOSScannerKeyPress = function(e) {
+            if (e.key === 'Enter') {
+                const barcode = e.target.value.trim();
+                if (barcode !== "") {
+                    addToCart(barcode);
+                    e.target.value = '';
+                }
+            }
+        };
         // Add event listener binding directly to support inline execution safely
         document.getElementById('pos-scanner-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1753,6 +1714,101 @@
         if (selectAdmin) {
             selectAdmin.addEventListener('change', renderDashboard);
         }
+
+        // ==========================================
+        // KEYBOARD SHORTCUTS CONTROLLER
+        // ==========================================
+        window.toggleShortcutsGuide = function() {
+            const container = document.getElementById('shortcuts-list-container');
+            const icon = document.getElementById('shortcuts-toggle-icon');
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                container.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        };
+
+        document.addEventListener('keydown', function(e) {
+            // Allow F5 and F12 to pass naturally for browser operations
+            if (e.key === 'F5' || e.key === 'F12') return;
+
+            switch (e.key) {
+                case 'F1':
+                    e.preventDefault();
+                    switchTab('dashboard');
+                    break;
+                case 'F2':
+                    e.preventDefault();
+                    switchTab('pos');
+                    break;
+                case 'F3':
+                    e.preventDefault();
+                    switchTab('inventory');
+                    break;
+                case 'F4':
+                    e.preventDefault();
+                    switchTab('customers');
+                    break;
+                case 'F8':
+                    e.preventDefault();
+                    switchTab('reports');
+                    break;
+                case 'F6':
+                    e.preventDefault();
+                    const posSecF6 = document.getElementById('section-pos');
+                    if (posSecF6 && !posSecF6.classList.contains('hidden')) {
+                        const scannerInput = document.getElementById('pos-scanner-input');
+                        if (scannerInput) {
+                            scannerInput.focus();
+                            scannerInput.select();
+                        }
+                    }
+                    break;
+                case 'F7':
+                    e.preventDefault();
+                    const invSec = document.getElementById('section-inventory');
+                    const custSec = document.getElementById('section-customers');
+                    if (invSec && !invSec.classList.contains('hidden')) {
+                        openProductModal();
+                    } else if (custSec && !custSec.classList.contains('hidden')) {
+                        openCustomerModal();
+                    }
+                    break;
+                case 'F9':
+                    e.preventDefault();
+                    const posSecF9 = document.getElementById('section-pos');
+                    if (posSecF9 && !posSecF9.classList.contains('hidden')) {
+                        clearCart();
+                    }
+                    break;
+                case 'F10':
+                    e.preventDefault();
+                    const posSecF10 = document.getElementById('section-pos');
+                    if (posSecF10 && !posSecF10.classList.contains('hidden')) {
+                        if (cart && cart.length > 0) {
+                            checkout();
+                        }
+                    }
+                    break;
+                case 'Escape':
+                    const prodModal = document.getElementById('product-modal');
+                    const custModal = document.getElementById('customer-modal');
+                    const expModal = document.getElementById('expense-modal');
+                    
+                    if (prodModal && !prodModal.classList.contains('hidden')) {
+                        closeProductModal();
+                    }
+                    if (custModal && !custModal.classList.contains('hidden')) {
+                        closeCustomerModal();
+                    }
+                    if (expModal && !expModal.classList.contains('hidden')) {
+                        closeExpenseModal();
+                    }
+                    break;
+            }
+        });
 
     </script>
 </body>
